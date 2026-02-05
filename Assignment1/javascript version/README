@@ -1,0 +1,68 @@
+# Working with Artistoo - Quick start
+
+For more detailed instructions on starting with Artistoo, see: https://artistoo.net/manual/getting-started.html,
+or check out some examples in codepen: https://codepen.io/collection/rBNpEW.
+
+## In the browser
+
+To work with Artistoo in the browser, you don't have to install anything, you just need to 
+source the library script either from online at: https://cdn.jsdelivr.net/gh/ingewortel/artistoo@1.2.0/build/artistoo.js,
+or locally from this directory (`artistoo_minimal/build/artistoo.js`).
+
+For example, go to the `./example_node` directory, where you can find `MyFirstSimulation.html` 
+with template code. Simply open this file in the browser and you can see the simulation of a single CPM cell,
+or open it in your favourite text editor to see and edit the code.
+
+
+## In Node.js
+
+It is also possible to run artistoo as a command line application by using Node.js. 
+This is useful if you want to save output data (for example if you want to store a csv of 
+coordinates over time for downstream analysis in R or python, or if you want to store images
+of the simulation state). For this you will need to install Node.js and relevant packages first. 
+
+### Install Node.js and npm and packages
+
+If you do not have Node.js and its package manager npm, install them first: https://nodejs.org/en/download/.
+
+Alternatively, if you use conda, you can also use the provided `env.yml` file to install Node.js and npm:
+
+```
+conda env create -f env.yml
+conda activate artistoo-env
+```
+
+Finally, once Node.js and npm are installed, you can run the following command in your 
+terminal from the main directory to install the artistoo dependences 
+
+```
+cd ./artistoo_minimal
+npm install
+```
+
+
+### Running Artistoo from the terminal using node
+
+Now go to the `./example_node` directory, where you can find `MyFirstSimulation.js` that 
+contains the same simulation code as `MyFirstSimulation.html`, but is run using node. 
+This allows you to easily save any logged output. You can run `node MyFirstSimulation.js` in 
+the terminal to see the output. If you want to save the output of the simulation in a file so that you can later analyse it, you can run:
+
+```
+cd ../example_node
+node MyFirstSimulation.js > myfile.txt
+```
+
+This will create a txt file that you can further analyse in any language of your choice,
+as well as simulation images in the folder `img`.
+
+If you want, you can combine these into an animation, for example using ffmpeg (https://www.ffmpeg.org/download.html):
+
+```
+cd ../example_node
+node MyFirstSimulation.js > myfile.txt
+ffmpeg -i "img/simulation-t%d0.png" -r 10 -vf scale=256:-1 test.gif
+```
+
+
+
