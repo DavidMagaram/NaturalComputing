@@ -1,0 +1,112 @@
+<!-- Page setup and title -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;
+charset=UTF-8">
+<title>PageTitle</title>
+<style type="text/css"> 
+body{
+    font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+</style>
+
+<!-- Sourcing the cpm build -->
+<script src="../artistoo_minimal/build/artistoo.js"></script>
+<script>
+"use strict"
+
+
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],// Border. True = wrapped. False=borders.
+		seed : 1,							// Seed for random number generation.
+		T : 20,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+				
+		// Adhesion parameters: [background, obstacle, moving cell]
+		J: [[0,20,20], [20,0,1000], [20,0,0]],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V: [0,500,50],					// Obstacle rigid, moving cell flexible
+		V: [0,150,200],							// Same size for both
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P: [0,200,2],						
+		P : [0,10,180],						
+		
+		// ActivityConstraint parameters
+		LAMBDA_ACT : [0,0,200],				// Obstacle has NO activity
+		MAX_ACT : [0,0,20],					// Obstacle cannot move
+		ACT_MEAN : "geometric"				
+
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid: [1 obstacle, 1 moving cell]
+		NRCELLS : [0, 50],			// 64 does not work but 70 does....			For cells, 50 works but 100 does not...
+		// Runtime etc
+		BURNIN : 500,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		FRAMERATE : 5,
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["CCCCCC", "000000"],  // Blue obstacle, black moving cell
+		ACTCOLOR : [false, true],					
+		SHOWBORDERS : [false, false],				
+		zoom : 2,							
+		
+		// Output images
+		//SAVEIMG : true,					
+		//IMGFRAMERATE : 1,					
+		//SAVEPATH : "output/img/ActModel",	
+		//EXPNAME : "ActModel",					
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true },
+		LOGRATE : 10							
+
+	}
+}
+
+
+// // Initialize simulation for node
+// let sim = new CPM.Simulation( config )
+
+// Initialize simulation for html
+let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+    step()
+}
+function step(){
+    sim.step()
+    requestAnimationFrame( step )
+}
+
+// // Run with: node MyFirstSimulation.js
+// sim.run()
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>Your Page Title</h1>
+<p>
+Description of your page.
+</p>
+</body>
+</html>
