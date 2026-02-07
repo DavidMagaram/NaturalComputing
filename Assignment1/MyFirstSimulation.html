@@ -3,7 +3,7 @@
 <title>ActModel</title>
 <link rel="stylesheet" href="./style.css">
 <script src="./sliders.js"></script>
-<script src="./artistoo_minimal/build/artistoo.js"></script>
+<script src="../artistoo_minimal/build/artistoo.js"></script>
 <script>
 "use strict"
 
@@ -52,7 +52,14 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid: [1 obstacle, 1 moving cell]
-		NRCELLS : [0, 50],			// 64 does not work but 70 does....			For cells, 50 works but 100 does not...
+		NRCELLS : [25, 50],			// 64 does not work but 70 does....			For cells, 50 works but 100 does not...
+
+		// Spacing 100 = 4
+		// Spacing 68 = 9 (68 because at 66 there were some artefacts)
+		// Spacingg 50 = 16
+		// Spacing 38 = 25
+		// No config (so far) works with 36 obstacles
+
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -122,7 +129,7 @@ function placeObstacles(){
 	let fieldHeight = config.field_size[1]
 	
 	// Grid pattern that adapts to field size
-	let spacing = 50  // Distance between obstacles
+	let spacing = 38  // Distance between obstacles (keep even (2,4,6...))
 	for(let x = spacing/2; x < fieldWidth; x += spacing){
 		for(let y = spacing/2; y < fieldHeight; y += spacing){
 			placeCircularObstacle(x, y, obstacleSize, obstacleID)
