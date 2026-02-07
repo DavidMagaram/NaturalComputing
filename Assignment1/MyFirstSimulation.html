@@ -22,7 +22,7 @@ let config = {
 	conf : {
 		// Basic CPM parameters
 		torus : [true,true],// Border. True = wrapped. False=borders.
-		seed : 1,							// Seed for random number generation.
+		seed : 4,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		
 		// Constraint parameters. 
@@ -52,13 +52,21 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid: [1 obstacle, 1 moving cell]
-		NRCELLS : [25, 50],			// 64 does not work but 70 does....			For cells, 50 works but 100 does not...
+		NRCELLS : [4, 37],	// Change this for more or less cells. First one is for obstacles. Set it to squares (3x3, 4x4, 5x5...). Second one is for moving (black) cells. 37 is number that just works. More will break it, less works fine.  
 
+
+		// V 150
+		// Can only fit maximum of 37 (black) cells. 
 		// Spacing 100 = 4
-		// Spacing 68 = 9 (68 because at 66 there were some artefacts)
-		// Spacingg 50 = 16
+		// Spacing 66 = 9 (anything between 60-70 works)
+		// Spacingg 48 = 16
 		// Spacing 38 = 25
-		// No config (so far) works with 36 obstacles
+		// Spacing 34 = 36
+
+		// V 125
+		// Spacing 100 = 4
+		// Spacing 70/68/66 = 9 
+		// Spacingg 50 = 16
 
 		// Runtime etc
 		BURNIN : 500,
@@ -110,14 +118,17 @@ function setSliders(){
 
 
 function initialize(){
-	// Create simulation but DON'T auto-seed obstacles
 	let customConfig = Object.assign({}, config.simsettings)
-	customConfig.NRCELLS = [0, 0]  // 0 obstacles (we'll place manually), 100 moving cells
+	customConfig.NRCELLS = [0, 0]
 	
 	sim = new CPM.Simulation( config, customConfig )
 	
-	// Now manually place obstacles at specific positions
 	placeObstacles()
+	
+	// Use the value from config instead of hardcoding 50
+	for(let i = 0; i < config.simsettings.NRCELLS[1]; i++){
+		sim.gm.seedCell(2)
+	}
 	
 	step()
 }
@@ -129,7 +140,7 @@ function placeObstacles(){
 	let fieldHeight = config.field_size[1]
 	
 	// Grid pattern that adapts to field size
-	let spacing = 38  // Distance between obstacles (keep even (2,4,6...))
+	let spacing = 100  // Distance between obstacles (keep even (2,4,6...))
 	for(let x = spacing/2; x < fieldWidth; x += spacing){
 		for(let y = spacing/2; y < fieldHeight; y += spacing){
 			placeCircularObstacle(x, y, obstacleSize, obstacleID)
