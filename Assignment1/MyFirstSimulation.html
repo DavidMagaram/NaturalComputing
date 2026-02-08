@@ -51,12 +51,11 @@ let config = {
 	// Simulation setup and configuration
 	simsettings : {
 	
-		// Cells on the grid: [1 obstacle, 1 moving cell]
-		NRCELLS : [4, 37],	// Change this for more or less cells. First one is for obstacles. Set it to squares (3x3, 4x4, 5x5...). Second one is for moving (black) cells. 37 is number that just works. More will break it, less works fine.  
+		// Cells on the grid: [obstacle, moving cell]
+		NRCELLS : [36, 0],	// NUMBER OF CELLS. First element is # of obstacles. Should be square (3x3, 4x4, 5x5...) and you should also change spacing in placeObstacles() function. Second element is number of moving cells - keep 0 here and set the number in the initialize function to avoid issues. 
 
 
 		// V 150
-		// Can only fit maximum of 37 (black) cells. 
 		// Spacing 100 = 4
 		// Spacing 66 = 9 (anything between 60-70 works)
 		// Spacingg 48 = 16
@@ -76,7 +75,7 @@ let config = {
 		FRAMERATE : 1,
 		// Visualization
 		CANVASCOLOR : "eaecef",
-		CELLCOLOR : ["CCCCCC", "000000"],  // Blue obstacle, black moving cell
+		CELLCOLOR : ["CCCCCC", "000000"],
 		ACTCOLOR : [false, true],					
 		SHOWBORDERS : [false, false],				
 		zoom : 2,							
@@ -108,8 +107,8 @@ function step(){
 }
 
 function setSliders(){
-	document.getElementById("mact").value = config.conf.MAX_ACT[2]  // Changed to index 2
-	document.getElementById("lact").value = config.conf.LAMBDA_ACT[2]  // Changed to index 2
+	document.getElementById("mact").value = config.conf.MAX_ACT[2] 
+	document.getElementById("lact").value = config.conf.LAMBDA_ACT[2]  
 }
 
 
@@ -125,8 +124,8 @@ function initialize(){
 	
 	placeObstacles()
 	
-	// Use the value from config instead of hardcoding 50
-	for(let i = 0; i < config.simsettings.NRCELLS[1]; i++){
+	
+	for(let i = 0; i < 74; i++){ // CHANGE HERE FOR NUMBER OF CELLS 
 		sim.gm.seedCell(2)
 	}
 	
@@ -139,8 +138,14 @@ function placeObstacles(){
 	let fieldWidth = config.field_size[0]
 	let fieldHeight = config.field_size[1]
 	
-	// Grid pattern that adapts to field size
-	let spacing = 100  // Distance between obstacles (keep even (2,4,6...))
+	
+	let spacing = 34  // CHANGE HERE FOR SPACING OF OBSTACLES. KEEP EVEN (2,4,6...). 
+		// V 150
+		// Spacing 100 = 4
+		// Spacing 66 = 9 (anything between 60-70 works)
+		// Spacingg 48 = 16
+		// Spacing 38 = 25
+		// Spacing 34 = 36
 	for(let x = spacing/2; x < fieldWidth; x += spacing){
 		for(let y = spacing/2; y < fieldHeight; y += spacing){
 			placeCircularObstacle(x, y, obstacleSize, obstacleID)
