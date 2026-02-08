@@ -45,22 +45,13 @@ let config = {
 	// Simulation setup and configuration
 	simsettings : {
 
-		// Cells on the grid: [1 obstacle, 1 moving cell]
-		NRCELLS : [0, 37],	// Change this for more or less cells. First one is for obstacles. Set it to squares (3x3, 4x4, 5x5...). Second one is for moving (black) cells. 37 is number that just works. More will break it, less works fine.
+		// Cells on the grid - set to [0,0] since we manually place obstacles and seed cells below
+		NRCELLS : [0, 0],
+		MANUAL_CELL_COUNT: 37,  // Number of moving cells to seed
 
-
-		// V 150
-		// Can only fit maximum of 37 (black) cells.
-		// Spacing 100 = 4
-		// Spacing 66 = 9 (anything between 60-70 works)
-		// Spacingg 48 = 16
-		// Spacing 38 = 25
-		// Spacing 34 = 36
-
-		// V 125
-		// Spacing 100 = 4
-		// Spacing 70/68/66 = 9
-		// Spacingg 50 = 16
+		// Obstacle configuration
+		OBSTACLE_COUNT: 16,      // Number of obstacles (should be a perfect square: 0, 1, 4, 9, 16, 25...)
+		OBSTACLE_SIZE: 10,      // Radius of circular obstacles
 
 		// Runtime etc
 		BURNIN : 0,
@@ -88,24 +79,30 @@ let config = {
 }
 /*	---------------------------------- */
 
-// Custom initialization with obstacles
-let customConfig = Object.assign({}, config.simsettings)
-customConfig.NRCELLS = [0, 0]
-
-let sim = new CPM.Simulation( config, customConfig )
+// Initialize simulation
+let sim = new CPM.Simulation( config )
 
 function placeObstacles(){
-	let obstacleID = 1
-	let obstacleSize = 10
+	let obstacleCount = config.simsettings.OBSTACLE_COUNT
+	if(obstacleCount === 0) return
+
+	let obstacleSize = config.simsettings.OBSTACLE_SIZE
 	let fieldWidth = config.field_size[0]
 	let fieldHeight = config.field_size[1]
 
-	// Grid pattern that adapts to field size
-	let spacing = 100  // Distance between obstacles (keep even (2,4,6...))
-	for(let x = spacing/2; x < fieldWidth; x += spacing){
-		for(let y = spacing/2; y < fieldHeight; y += spacing){
+	// Calculate grid size from count (assumes perfect square)
+	let gridSize = Math.round(Math.sqrt(obstacleCount))
+	let spacingX = fieldWidth / gridSize
+	let spacingY = fieldHeight / gridSize
+
+	// Place obstacles evenly spaced
+	for(let i = 0; i < gridSize; i++){
+		for(let j = 0; j < gridSize; j++){
+			let x = spacingX/2 + i * spacingX
+			let y = spacingY/2 + j * spacingY
+			// Create a new cell of cellkind 1 (obstacle) and get its ID
+			let obstacleID = sim.C.makeNewCellID(1)
 			placeCircularObstacle(x, y, obstacleSize, obstacleID)
-			obstacleID++
 		}
 	}
 }
@@ -138,7 +135,7 @@ function placeSquareObstacle(centerX, centerY, size, cellID){
 placeObstacles()
 
 // Seed moving cells
-for(let i = 0; i < config.simsettings.NRCELLS[1]; i++){
+for(let i = 0; i < config.simsettings.MANUAL_CELL_COUNT; i++){
 	sim.gm.seedCell(2)
 }
 

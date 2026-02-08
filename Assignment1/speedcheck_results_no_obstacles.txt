@@ -2,23 +2,23 @@
 CELL MOVEMENT ANALYSIS (active cells only)
 ==================================================
 
-Dataset: 4440 observations
+Dataset: 2220 observations
 Time range: 0 - 590
-Number of active cells: 74
+Number of active cells: 37
 
 --------------------------------------------------
 SPEED STATISTICS (pixels/timestep)
 --------------------------------------------------
-Mean speed across all cells:   0.0960
-Std dev of cell speeds:        0.1928
-Fastest cell avg speed:        1.4168
-Slowest cell avg speed:        0.0112
+Mean speed across all cells:   0.1359
+Std dev of cell speeds:        0.2003
+Fastest cell avg speed:        1.0964
+Slowest cell avg speed:        0.0321
 
 --------------------------------------------------
 DISTANCE STATISTICS (total pixels traveled)
 --------------------------------------------------
-Mean distance per cell:        56.63
-Max distance (most active):    835.92
-Min distance (least active):   6.58
+Mean distance per cell:        80.18
+Max distance (most active):    646.89
+Min distance (least active):   18.95
 
 ==================================================
