@@ -3,3 +3,5 @@
 * We should include relevant equations
 * a graph showing how speed changes with number of cells & obstacles
 * We should probably have a table with all chosen parameters and justify the important ones
+* We need a proper research question that is posed and answered
+* > Does the answer mention the alignment of directions in the scenario without obstacles, which is disturbed when obstacles are present? I don't think ours does
