@@ -6,3 +6,4 @@
 * We need a proper research question that is posed and answered
 * > Does the answer mention the alignment of directions in the scenario without obstacles, which is disturbed when obstacles are present? I don't think ours does
 * Implement Migration of cells: the correct choice was maxact=80; see ex 1.3
+* > Is it clear which statements are factual observations (“the cells did X in context Y”) and which are interpretations thereof (“these findings suggest that obstacles do X”)? I don't think we really do that either
