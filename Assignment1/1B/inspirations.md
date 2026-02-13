@@ -15,3 +15,4 @@
 * Group 2: Interesting equations for basic things like max_act and delta H
 * Group 2: Ideal parameter overview of the obstacles and cells
 * Group 2 has a very good overall paper already! Good to copy from hehe.
+* Group 16: Display Speed of cells over time across different experiments.
