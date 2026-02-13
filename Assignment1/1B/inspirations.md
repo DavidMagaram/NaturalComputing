@@ -12,3 +12,6 @@
     • If adhesion values J are given in a matrix, it should be clear which celltypes are in the rows and columns;
     • Densities of cells and obstacles (or numbers, but then the size of the simulation field should be included) No
 * Are there any other reasons why results may not be reproducible? Yes
+* Group 2: Interesting equations for basic things like max_act and delta H
+* Group 2: Ideal parameter overview of the obstacles and cells
+* Group 2 has a very good overall paper already! Good to copy from hehe.
