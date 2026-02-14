@@ -1,5 +1,5 @@
 * 1 - Done
-* 2 - Started
+* 2 - Done
 * 4 - Done
-* 5 - Not started
+* 5 - Started
 * 16 - Not started
