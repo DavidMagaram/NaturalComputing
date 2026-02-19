@@ -17,3 +17,4 @@
 * Group 2 has a very good overall paper already! Good to copy from hehe.
 * Group 16: Display Speed of cells over time across different experiments.
 * We should probably justify why we use a CPM in the first place
+* Lecture: After some X density of cells, they all start moving in the same direction (flock/swarm behavior in cell migration).
