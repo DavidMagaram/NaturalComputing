@@ -1,6 +1,6 @@
 node_modules/
 *.png
 .~lock*
-*Experiments/*.gif
-*Experiments/*.txt
+Experiments/**/*.gif
+Experiments/**/*.txt
 baseline*.txt
