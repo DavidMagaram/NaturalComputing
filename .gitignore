@@ -1,3 +1,5 @@
 node_modules/
 *.png
 .~lock*
+*Experiments/*.gif
+*Experiments/*.txt
