@@ -25,19 +25,19 @@ let config = {
 		// First value is always cellkind 0 (the background) and is often not used.
 
 		// Adhesion parameters: [background, obstacle, moving cell]
-		J: [[0,20,20], [20,0,1000], [20,0,0]],
+		J: [[0,20,20], [15,0,1000], [15,1000,0]],
 
 		// VolumeConstraint parameters
-		LAMBDA_V: [0,500,50],					// Obstacle rigid, moving cell flexible
-		V: [0,150,200],							// Same size for both
+		LAMBDA_V: [0,50,500],					// Obstacle rigid, moving cell flexible
+		V: [0,200,130],							// Same size for both
 
 		// PerimeterConstraint parameters
-		LAMBDA_P: [0,200,2],
-		P : [0,10,180],
+		LAMBDA_P: [0,2,200],
+		P : [0,180,50],
 
 		// ActivityConstraint parameters
-		LAMBDA_ACT : [0,0,200],				// Obstacle has NO activity
-		MAX_ACT : [0,0,20],					// Obstacle cannot move
+		LAMBDA_ACT : [0,200,0],				// Obstacle has NO activity
+		MAX_ACT : [0,20,0],					// Obstacle cannot move
 		ACT_MEAN : "geometric"
 
 	},
@@ -46,22 +46,21 @@ let config = {
 	simsettings : {
 
 		// Cells on the grid - set to [0,0] since we manually place obstacles and seed cells below
-		NRCELLS : [0, 0],
-		MANUAL_CELL_COUNT: 37,  // Number of moving cells to seed
+		NRCELLS : [40, 0],
 
-		// Obstacle configuration
-		OBSTACLE_COUNT: 16,      // Number of obstacles (should be a perfect square: 0, 1, 4, 9, 16, 25...)
-		OBSTACLE_SIZE: 10,      // Radius of circular obstacles
+		NUM_OBSTACLES : 0, // Number of obstacles. Keep square (3x3, 4x4, 5x5....). 
+		OBSTACLE_RADIUS : 6, // Just places pixels in that radius. Then V and P determine final shape and size of obstacles.
+		OBSTACLE_PADDING : 25, // Padding from borders. 25 is golden, but can always adjust if changing NUM_OBSTACLES or field size.
 
 		// Runtime etc
 		BURNIN : 0,
-		RUNTIME : 600,
+		RUNTIME : 900,
 
 		FRAMERATE : 1,
 		// Visualization
 		CANVASCOLOR : "eaecef",
-		CELLCOLOR : ["CCCCCC", "000000"],  // Blue obstacle, black moving cell
-		ACTCOLOR : [false, true],
+		CELLCOLOR : ["000000", "888888"],  // Blue obstacle, black moving cell
+		ACTCOLOR : [true, false],
 		SHOWBORDERS : [false, false],
 		zoom : 2,
 
@@ -82,57 +81,45 @@ let config = {
 // Initialize simulation
 let sim = new CPM.Simulation( config )
 
-function placeObstacles(){
-	let obstacleCount = config.simsettings.OBSTACLE_COUNT
-	if(obstacleCount === 0) return
-
-	let obstacleSize = config.simsettings.OBSTACLE_SIZE
-	let fieldWidth = config.field_size[0]
-	let fieldHeight = config.field_size[1]
-
-	// Calculate grid size from count (assumes perfect square)
-	let gridSize = Math.round(Math.sqrt(obstacleCount))
-	let spacingX = fieldWidth / gridSize
-	let spacingY = fieldHeight / gridSize
-
-	// Place obstacles evenly spaced
-	for(let i = 0; i < gridSize; i++){
-		for(let j = 0; j < gridSize; j++){
-			let x = spacingX/2 + i * spacingX
-			let y = spacingY/2 + j * spacingY
-			// Create a new cell of cellkind 1 (obstacle) and get its ID
-			let obstacleID = sim.C.makeNewCellID(1)
-			placeCircularObstacle(x, y, obstacleSize, obstacleID)
-		}
+function buildObstacles(){
+	const numObstacles = config.simsettings.NUM_OBSTACLES
+	
+	if( numObstacles === 0 ){
+		return
 	}
-}
-
-function placeCircularObstacle(centerX, centerY, radius, cellID){
-	// Draw a circular obstacle
-	for(let x = centerX - radius; x <= centerX + radius; x++){
-		for(let y = centerY - radius; y <= centerY + radius; y++){
-			// Check if pixel is within circle
-			let dx = x - centerX
-			let dy = y - centerY
-			if(dx*dx + dy*dy <= radius*radius){
-				sim.C.setpix([x, y], cellID)
+	
+	const gridSize = Math.sqrt(numObstacles)
+	const radius = config.simsettings.OBSTACLE_RADIUS
+	const padding = config.simsettings.OBSTACLE_PADDING
+	
+	const xSpacing = Math.floor((config.field_size[0] - 2 * padding) / (gridSize - 1))
+	const ySpacing = Math.floor((config.field_size[1] - 2 * padding) / (gridSize - 1))
+	
+	// Create obstacle cells (cellkind 2)
+	for( let i = 0; i < gridSize; i++ ){
+		for( let j = 0; j < gridSize; j++ ){
+			const centerX = padding + xSpacing * i
+			const centerY = padding + ySpacing * j
+			
+			// Create a new obstacle cell
+			const obstacleID = sim.C.makeNewCellID( 2 )
+			
+			// Place pixels for this obstacle
+			for( let xx = centerX - radius; xx <= centerX + radius; xx++ ){
+				for( let yy = centerY - radius; yy <= centerY + radius; yy++){
+					let dx = Math.abs( xx - centerX )
+					let dy = Math.abs( yy - centerY )
+					if( Math.sqrt( dx*dx + dy*dy ) < radius ){
+						sim.C.setpix( [xx, yy], obstacleID )
+					}	
+				}
 			}
 		}
 	}
 }
 
-function placeSquareObstacle(centerX, centerY, size, cellID){
-	// Draw a square obstacle
-	let halfSize = Math.floor(size / 2)
-	for(let x = centerX - halfSize; x <= centerX + halfSize; x++){
-		for(let y = centerY - halfSize; y <= centerY + halfSize; y++){
-			sim.C.setpix([x, y], cellID)
-		}
-	}
-}
-
 // Place obstacles first
-placeObstacles()
+buildObstacles()
 
 // Seed moving cells
 for(let i = 0; i < config.simsettings.MANUAL_CELL_COUNT; i++){
