@@ -1,9 +1,8 @@
 \documentclass{article}
 \usepackage[english]{babel}
-
+\usepackage[toc,page]{appendix}
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
-% Useful packages
 \usepackage{amsmath}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
@@ -19,7 +18,6 @@ Your introduction goes here! Simply start writing your document.
 \section{Methodology}
 
 \section{Results}
-
 \section{Discussion}
 
 \section{Conclusion}
@@ -28,5 +26,20 @@ Your introduction goes here! Simply start writing your document.
 
 \begin{thebibliography}{9}
 \end{thebibliography}
+
+\clearpage
+\begin{appendices}
+\section*{Task 1: Using the Negative Selection Algorithm}
+This section contains the questions and answers from "Your task" on page 2 of the second assignment.
+\begin{itemize}
+    \item \textit{Compute the area under the receiver operating characteristic curve (AUC [1][2]) to quantify how well the negative selection algorithm with parameters $n = 10$ and different values of $r$ ($r = 1$ until $r = 9$) discriminates individual English strings from Tagalog strings by using the files english.train for training and english.test as well as tagalog.test for testing. Which value of $r$ belongs to what AUC in figure 1?}\\
+Plot 1 has an $r$-value of 1, plot 2 has an $r$-value of 7, and plot 3 has an $r$-value of 4.
+    \item \textit{How does the AUC change when you modify the parameter $r$? Specifically, what behaviour do you observe at $r = 1$ and $r = 9$ and how can you explain this behaviour? Which value of $r$ leads to the best discrimination?}
+\end{itemize}
+
+    
+
+
+\end{appendices}
 
 \end{document}
