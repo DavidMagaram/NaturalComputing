@@ -4,3 +4,4 @@ node_modules/
 02*.gif
 02*.txt
 baseline*.txt
+tmp*
