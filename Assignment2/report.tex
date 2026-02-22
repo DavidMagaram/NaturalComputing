@@ -94,40 +94,40 @@ In this section, we evaluate the performance of the negative selection algorithm
 two phases: the initial baseline approach (using unchunked training data) and the optimized approach (where both training and test data were preprocessed into fixed-length chunks).
 
 \subsection{Unchunked Training Sequences}
-For our baseline evaluation, the training file was fed into the \texttt{negsel2} tool without explicit chunking, while the test sequences were split into non-overlapping chunks. To determine the optimal $n$ and $r$ parameters, we conducted a grid search on the first test split of 
-the \texttt{snd-cert} dataset.
+For our baseline evaluation, the training file was fed into the \texttt{negsel2} tool without explicit chunking, while the test sequences were split into non-overlapping chunks. We used the parameters $n = 10$ and $r = 4$ as a foundational starting point. To determine the optimal $n$ and $r$ parameters, we conducted a grid search on the first test split of 
+the \texttt{snd-unm} dataset, because it's smaller than the \texttt{snd-cert} dataset, thus it's computationally more efficient.
 
-
-The results (Table 1) indicate that a larger chunk size generally improves discriminative power, provided $r$ is scaled appropriately. However, a significant limitation was observed at $n=15$ with low $r$ values ($r \le 4$), which resulted in NaN (Not a Number) errors. This likely 
-occurs when the matching criteria are so loose that no distinct detectors can be generated, or all sequences are classified identically, making it impossible to compute an ROC curve.
-
-We validated a stable parameter combination ($n=7$, $r=6$) across all three test splits for both \texttt{snd-cert} and \texttt{snd-unm}. The algorithm demonstrated solid baseline performance (Table 2), achieving AUC scores around 0.91 on \texttt{snd-cert} and ranging from 0.93 to 0.97 on \texttt{snd-unm}.
-\begin{table}[h]
-\centering
-\caption{AUC Grid Search on \texttt{snd-cert} Split 1 (Unchunked Training Data)}
-\begin{tabular}{c c c c c c c}
-\hline
-\textbf{Chunk Size ($n$)} & \textbf{$r=2$} & \textbf{$r=3$} & \textbf{$r=4$} & \textbf{$r=5$} & \textbf{$r=6$} & \textbf{$r=7$} \\
-\hline
-7  & 0.8912 & 0.9212 & 0.9212 & 0.9224 & 0.9236 & - \\
-10 & 0.9106 & 0.9226 & 0.9222 & 0.9222 & 0.9222 & 0.9222 \\
-15 & NaN    & NaN    & NaN    & 0.9374 & -      & - \\
-\hline
-\end{tabular}
-\end{table}
+We validated a stable parameter combination ($n=10$, $r=4$) across all three test splits for both \texttt{snd-cert} and \texttt{snd-unm}. The algorithm demonstrated solid baseline performance (Table 1), achieving AUC scores around 0.94 on \texttt{snd-cert} and ranging from 0.93 to 0.97 on \texttt{snd-unm}.
 
 \begin{table}[h]
 \centering
-\caption{Baseline Validation across Test Splits (Unchunked Training, $n=7$, $r=6$)}
+\caption{Baseline Validation across Test Splits (Unchunked Training, $n=10$, $r=4$)}
 \begin{tabular}{l c c c}
 \hline
 \textbf{Dataset} & \textbf{Split 1} & \textbf{Split 2} & \textbf{Split 3} \\
 \hline
-\texttt{snd-cert} & 0.9180 & 0.9152 & 0.9161 \\
-\texttt{snd-unm}  & 0.9384 & 0.9712 & 0.9738 \\
+\texttt{snd-cert} & 0.9350 & 0.9456 & 0.9459 \\
+\texttt{snd-unm}  & 0.9344 & 0.9778 & 0.9789 \\
 \hline
 \end{tabular}
 \end{table}
+
+\begin{table}[h]
+\centering
+\caption{AUC Grid Search on \texttt{snd-unm} Split 1 (Unchunked Training Data)}
+\begin{tabular}{c c c c c c c}
+\hline
+\textbf{Chunk Size ($n$)} & \textbf{$r=2$} & \textbf{$r=3$} & \textbf{$r=4$} & \textbf{$r=5$} & \textbf{$r=6$}\\
+\hline
+7  & 0.8912 & 0.9396 & 0.9396 & 0.9388 & 0.9236\\
+10 & 0.9106 & 0.9344 & 0.9344 & 0.9344 & 0.9222 \\
+15 & NaN    & NaN    & NaN    & 0.9724 & -      \\
+\hline
+\end{tabular}
+\end{table}
+
+The results in Table 2 indicate that a larger chunk size generally improves discriminative power, provided $r$ is scaled appropriately. However, a significant limitation was observed at $n=15$ with low $r$ values ($r \le 4$), which resulted in NaN (Not a Number) errors. This likely 
+occurs when the matching criteria are so loose that no distinct detectors can be generated, or all sequences are classified identically, making it impossible to compute an ROC curve.
 
 \subsection{Chunked Training Sequences}
 To overcome the runtime bottlenecks warned about in the assignment brief and improve detection accuracy, we applied the chunking preprocessing step to the normal training sequences as well. Only the unique chunks were passed as the "self" corpus.
